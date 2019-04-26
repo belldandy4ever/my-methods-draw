@@ -81,25 +81,25 @@
 </div>
 
 <div id="menu_bar">
-  <!-- <a class="menu">
+  <a class="menu nonIframeItem">
     <div class="menu_title" id="logo"></div>
     <div class="menu_list">
-      <div id="tool_about" class="menu_item">About this Editor...</div>
+      <div id="tool_about" class="menu_item">关于编辑器(About this Editor...)</div>
       <div class="separator"></div>
-      <div id="tool_about" class="menu_item">Keyboard Shortcuts...</div>
+      <div id="tool_about" class="menu_item">快捷键(Keyboard Shortcuts...)</div>
     </div>
-  </a> -->
+  </a>
   
-  <!-- <div class="menu">
-    <div class="menu_title">File</div>
+  <div class="menu nonIframeItem">
+    <div class="menu_title">文件(File)</div>
     <div class="menu_list" id="file_menu"> 
-      <div id="tool_clear" class="menu_item">New Document</div>
-      <div id="tool_open" class="menu_item" style="display: none;"><div id="fileinputs"></div>Open SVG...</div>
-      <div id="tool_import" class="menu_item" style="display: none;"><div id="fileinputs_import"></div>Import Image...</div>
-      <div id="tool_save" class="menu_item">Save Image... <span class="shortcut">⌘S</span></div>
-      <div id="tool_export" class="menu_item">Export as PNG</div>
+      <div id="tool_clear" class="menu_item">新文件(New Document)</div>
+      <div id="tool_open" class="menu_item" style="display: none;"><div id="fileinputs"></div>打开SVG(Open SVG...)</div>
+      <div id="tool_import" class="menu_item" style="display: none;"><div id="fileinputs_import"></div>导入图片(Import Image...)</div>
+      <div id="tool_save" class="menu_item">储存图片(Save Image...)<span class="shortcut">⌘S</span></div>
+      <div id="tool_export" class="menu_item">导出PNG(Export as PNG)</div>
     </div>
-  </div> -->
+  </div>
 
   <div class="menu">
     <div class="menu_title">编辑(Edit)</div>
@@ -628,6 +628,10 @@
 
 <script type="text/javascript">
   var messageTargetOrigion = '*';
+  var isInIframe = top.location !== location
+  if(isInIframe){
+    $('.nonIframeItem').css('display','none')
+  }
 
   window.addEventListener('message',function(event){
     var eventTypes = ['setTargetOrigion', 'loadSvgString', 'requestSvgString'];
