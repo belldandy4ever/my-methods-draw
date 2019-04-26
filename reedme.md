@@ -3,8 +3,8 @@
 ## iframe引入示例
 ```
 <iframe 
-  title="methodDraw" 
-  name="methodDraw"
+  title="svgEditor" 
+  id="svgEditor"
   sandbox="allow-scripts allow-forms allow-same-origin" 
   src="./index.html" 
   height="800" 
@@ -15,35 +15,72 @@
 ```
 ---
 
-## 等待methodDraw加载完成示例
+## 等待methodDraw加载完成
 
-- 此代码表示查询methodDraw相关api是否已可调用，如不能调用，50ms后再反复查询，知道可调用后，执行回调
 ```
-function onMethodDrawReady(callback){
-  if(!window.frames['methodDraw'].svgCanvas){
-    setTimeout(()=>{
-      onMethodDrawReady(callback)
-    },50)
-    return 
+const editor = document.getElementById("svgEditor")
+editor.addEventListener('load',callback)
+```
+
+## 与SvgEditor交互说明
+
+- 所有与SvgEditor交互均使用H5 postMessage API
+
+- 调用SvgEditor相关功能：
+```
+  /*
+    type: api名字
+    data: 调用api时的参数
+    targetOrigin: SvgEditor iframe的src地址
+  */
+  editor.postMessage(
+    { type: String, data: Data },
+    targetOrigin: String
+  )
+
+```
+
+- 接收SvgEditor的事件:
+```
+window.addEventListener('message',eventListener)
+```
+
+## api功能列表
+#### 假定 
+    项目地址为：const origin = 'http://loaclhost:3000'
+    svgEditor iframe 地址： const svgOrigion = 'http://localhost:5000'
+
+
+- 设置svgEditor iframe发送信息的对象域名(通常为项目域名)
+```
+editor.addEventListener('load',function(){
+  editor.postMessage({
+    type: 'setTargetOrigion',
+    data: origin
+  },svgOrigion)
+})
+```
+
+- 加载svg string文件
+```
+editor.postMessage({
+  type: 'loadSvgString',
+  data: 'svgString....'
+},svgOrigion)
+```
+
+- 申请获取当前svgString
+```
+editor.postMessage({
+  type: 'requestSvgString'
+},svgOrigion)
+```
+
+- 获取申请的当前svgString
+```
+window.addEventListener('message',function(event){
+  if(event.data.type === 'responseSvgString'){
+    const svgString = event.data.data
   }
-  callback(window.frames['methodDraw'])
-}
+})
 ```
-
-## 相关api的调用
-
-注：以下代码editor均表示 methodDraw的实例
-```
-  const editor = window.frames['methodDraw]
-```
-
-- 加载字符串格式的svg
-``` 
-  editor.methodDraw.loadFromString(svgString)
-```
-
-- 将当前的svg以string形式获取
-```
-  editor.svgCanvas.svgCanvasToString()
-```
-

@@ -625,6 +625,33 @@
   <li><a href="#move_back">Send to Back<span class="shortcut">⌘⇧↓</span></a></li>
 </ul>
 
+
+<script type="text/javascript">
+  var messageTargetOrigion = '*';
+
+  window.addEventListener('message',function(event){
+    var eventTypes = ['setTargetOrigion', 'loadSvgString', 'requestSvgString'];
+    if(!event.data.type || eventTypes.indexOf(event.data.type) === -1){ 
+      return false ;
+    }  
+    switch(event.data.type){
+      case 'setTargetOrigion':
+        messageTargetOrigion = event.data.data;
+        break
+      case 'loadSvgString':
+        methodDraw.loadFromString(event.data.data);
+        break ;
+      case 'requestSvgString':
+        var svgString = svgCanvas.svgCanvasToString()
+        window.top.postMessage({type:'responseSvgString',data:svgString},messageTargetOrigion)
+        break ;
+      default:
+        break ;
+    }
+    event.stopImmediatePropagation() ;
+  })
+
+</script>
 </body>
 </html>
 
