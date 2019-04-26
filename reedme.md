@@ -30,3 +30,20 @@ function onMethodDrawReady(callback){
 }
 ```
 
+## 相关api的调用
+
+注：以下代码editor均表示 methodDraw的实例
+```
+  const editor = window.frames['methodDraw]
+```
+
+- 加载字符串格式的svg
+``` 
+  editor.methodDraw.loadFromString(svgString)
+```
+
+- 将当前的svg以string形式获取
+```
+  editor.svgCanvas.svgCanvasToString()
+```
+
